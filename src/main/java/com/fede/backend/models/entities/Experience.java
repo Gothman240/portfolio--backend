@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -16,8 +17,8 @@ public class Experience {
     private Long id;
     private String name;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private ExperienceType type;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id")
@@ -26,7 +27,7 @@ public class Experience {
     public Experience() {
     }
 
-    public Experience( String name, String description, Date startDate, Date endDate, ExperienceType type, Profile profileExperience ) {
+    public Experience( String name, String description, LocalDate startDate, LocalDate endDate, ExperienceType type, Profile profileExperience ) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
