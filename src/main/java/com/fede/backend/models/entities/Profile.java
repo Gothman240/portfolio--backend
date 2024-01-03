@@ -1,6 +1,8 @@
 package com.fede.backend.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +16,11 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String lastname;
+    @Size(max = 255)
     private String aboutMe;
     private String profilePicture;
     @OneToOne

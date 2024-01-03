@@ -42,21 +42,24 @@ public class SpringSecurityConfig {
     SecurityFilterChain filterChain( HttpSecurity httpSecurity ) throws Exception {
         httpSecurity.authorizeHttpRequests( req -> req.requestMatchers( HttpMethod.POST, "/users" ).permitAll()
                         .requestMatchers( HttpMethod.GET, "/users" ).permitAll()
+                        .requestMatchers( HttpMethod.GET, "/profile/{username}" ).permitAll()
+                        .requestMatchers( HttpMethod.POST, "/profile" ).hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN" )
                         .anyRequest().permitAll()
                 ).addFilter( new JwtAuthentiacionFilter( authenticationConfiguration.getAuthenticationManager() ) )
                 .addFilter( new JwtValidationFilter( authenticationConfiguration.getAuthenticationManager() ) )
                 .csrf( AbstractHttpConfigurer::disable )
                 .sessionManagement( httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) )
                 .cors( corsConfigurer -> corsConfigurer.configurationSource( corsConfigurationSource() ) );
+
         return httpSecurity.build();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins( Arrays.asList( "http://localhost:8080" ) );
-        configuration.setAllowedMethods( Arrays.asList( "GET", "POST", "PUT", "DELETE" ) );
-        configuration.setAllowedHeaders( Arrays.asList( "Authorization", "Content-Type" ) );
+        configuration.setAllowedOrigins( Arrays.asList( "http://localhost:8080", "http://localhost:8080/h2-console/**") );
+        configuration.setAllowedMethods( Arrays.asList( "GET", "POST", "PUT", "DELETE", "OPTIONS" ) );
+        configuration.setAllowedHeaders( Arrays.asList( "Authorization", "Content-Type", "X-Requested-With" ) );
         configuration.setAllowCredentials( true );
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

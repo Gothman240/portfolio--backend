@@ -39,17 +39,19 @@ public class PersonServiceImpl implements PersonService {
     public PersonDto save( Person person ) {
         person.setPassword( passwordEncoder.encode( person.getPassword() ) );
 
-        Optional<Rol> optionalRol = rolRepository.findByName("ROL_USER");
+        Optional<Rol> optionalRol = rolRepository.findByName("ROLE_USER");
 
-        List<Rol> rolList = new ArrayList<>();
+        Rol rolList = null;
 
         if ( optionalRol.isPresent() ){
-            rolList.add( optionalRol.orElseThrow() );
+            rolList =  optionalRol.orElseThrow();
         }
 
-       person.setRoles( rolList );
+        person.getRoles().add( rolList );
 
-        return DtoMapperPerson.builder().setPerson( personRepository.save( person ) ).build();
+        personRepository.save( person );
+
+        return DtoMapperPerson.builder().setPerson( person ).build();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.fede.backend.models.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,8 +9,11 @@ import lombok.Setter;
 @Setter
 public class ProfileDto {
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String lastname;
+    @Size(max = 255)
     private String aboutMe;
     private String profilePicture;
 

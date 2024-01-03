@@ -34,6 +34,7 @@ public class PersonController {
         if ( result.hasErrors() ){
             return validationService.handleValidationErrors( result );
         }
+
         return ResponseEntity.status( HttpStatus.CREATED ).body( personService.save( person ) );
     }
     @GetMapping("/{id}")
