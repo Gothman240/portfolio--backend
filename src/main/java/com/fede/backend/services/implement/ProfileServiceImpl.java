@@ -76,7 +76,6 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public Optional<ProfileDto> update( ProfileDto profileDto, Long id ) {
 
-
         Optional<Profile> optionalProfile = profileRepository.findById( id );
 
         Profile profileDb = null;

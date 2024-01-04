@@ -1,11 +1,16 @@
 package com.fede.backend.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,21 +19,21 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String projectName;
+    @NotBlank
     private String description;
+    @NotNull
+    private String tech;
+    @NotBlank
+    @URL
     private String githubUrl;
+    @NotBlank
+    @URL
     private String deployUrl;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "profile_id")
     private Profile profileProject;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "project_languages",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "programmingLanguage_id"),
-            uniqueConstraints = {@UniqueConstraint( columnNames = {"project_id","programmingLanguage_id"})}
-    )
-    private List<ProgrammingLanguage> programmingLanguageList = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -37,12 +42,12 @@ public class Project {
             inverseJoinColumns = @JoinColumn(name = "framework_id"),
             uniqueConstraints = {@UniqueConstraint( columnNames = {"project_id","framework_id"})}
     )
-    private List<Framework> frameworkList = new ArrayList<>();
+    private Set<Framework> frameworkList = new HashSet<>();
 
     public Project() {
     }
 
-    public Project( String projectName, String description, String githubUrl, String deployUrl,           Profile profile ) {
+    public Project( String projectName, String description, String githubUrl, String deployUrl, Profile profile ) {
         this.projectName = projectName;
         this.description = description;
         this.githubUrl = githubUrl;
@@ -50,17 +55,4 @@ public class Project {
         this.profileProject = profile;
     }
 
-    public Project( String projectName, String description, String githubUrl, String deployUrl, Profile profileProject, List<ProgrammingLanguage> programmingLanguageList ) {
-        this.projectName = projectName;
-        this.description = description;
-        this.githubUrl = githubUrl;
-        this.deployUrl = deployUrl;
-        this.profileProject = profileProject;
-        this.programmingLanguageList = programmingLanguageList;
-    }
-
-    private void addLanguagePrograming (ProgrammingLanguage language){
-        programmingLanguageList.add( language );
-        language.getProjectList().add( this );
-    }
 }
